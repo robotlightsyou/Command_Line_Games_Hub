@@ -13,4 +13,4 @@ uses f strings so you need a newer python.
 The game itself quizes the user on their knowledge of 
 ETC Eos lighting terminology. Currently only utilizes a small
 dictionary, but I hope to have the full Eos glossary fed in
-soon.
+sootn.

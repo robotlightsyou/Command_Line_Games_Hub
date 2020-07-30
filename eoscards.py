@@ -159,12 +159,37 @@ def play_again():
     if input('>')[0].lower() != 'n':
         memory()
 
+# log scores and track user
+# time user resonse, divide response_time by length of definitions
+# weight terms in user_dict based on response_time
+#class USER():
+#    def __init__(self, name):
+#        self.name = name
+#        self.answered = USER_DICT(EOSDICT)
+
+#when user created check dicionary for existing terms
+#create user_dict with term, deinition, and user_score
+class USER():
+    def __init__(self, name, shared_dict):
+        self.name = name
+        self.shared_dict = shared_dict
+        for i in shared_dict:
+            #create empty dict for each term in game
+            self.i = {}
+            #add defintions with key 'def'
+            self.i['def'] = shared_dict[i]
+            self.i.times_answeered = 0
+            self.i.avg_time = 0
+
+    def __str__(self):
+        return self.name
+    def get_response_time(self):
+        pass
 
 if __name__ == '__main__':
     main()
 
 
-# log scores and track user
 
 ####################
 # console geography

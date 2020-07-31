@@ -5,19 +5,21 @@ This program is a command line text game that challenges the user on
 their knowledge of ETC Eos terminology.
 
 @TODOS:
-* weight answers for user comfort/difficulty
-* add timer on response to gauge how well user remembers
-    --> timer added, troubleshoot methods
-* add GUI
-* calling list() a lot when genrating answers, would be better for runtime
+* [ ] - weight answers for user comfort/difficulty
+* [X] - completed - change ask_q to be numbers to avoid str coersion
+  [ ] --> timer added, troubleshoot methods
+* [ ] - add GUI - most likely web inteface
+* [ ] - calling list() a lot when genrating answers, would be better for runtime
     to store all values at beginning?
-*X - completed - change ask_q to be numbers to avoid str coersion
-* add try block for input validation in ask_q()
-* add fake answer check to avoid repeats
+* [ ] - add try block for input validation in ask_q()
+* [ ] - add fake answer check to avoid repeats
 
-Object inheritance is failing, research how to make objects
+* [X] - completed - change ask_q to be numbers to avoid str coersion
+* [X] - completed - Object inheritance is failing, research how to make objects
 sub-object(?) instances nb User.(variable).attribute
-
+* [X] - completed - redefine to also print definition#
+* [X] - completed - redfine so dictionary name is included in Term object
+* [X] - completed - add method(s) to print stats
 '''
 
 import random
@@ -42,10 +44,11 @@ EOSDICT = {'go': 'execute a cue',
 
 ANS_LIST = ['order 66', 'address', 'go']
 
-#@TODO: redfine so dictionary name is included in Term object
+#completed: redfine so dictionary name is included in Term object
 class Term():
-    def __init__(self, name, shared_dict):
+    def __init__(self, name, shared_dict, dict_name):
         self.name = name
+        self .dict_name = dict_name
         self.defi = shared_dict[name]
         self.times_answeered = 0
         self.avg_time = 0
@@ -57,11 +60,15 @@ class Term():
         self.cum_time += ans_time
         self.avg_time = self.cum_time / self.times_answeered
 
-    #@TODO: add method(s) to print stats
+    #completed: add method(s) to print stats
+    def print_stats(self):
+        print(self.__str__())
+        print("Times answered: {}".format(self.times_answeered))
+        print("Average Time: {}".format(self.avg_time))
 
-    #@TODO: redefine to also print definition
+    #completed: redefine to also print definition
     def __str__(self):
-        return self.name
+        return "{}: {}\n".format(self.name, self.defi)
 
 
 class User():
@@ -70,13 +77,14 @@ class User():
 
     def add_deck(self, deck):
         for card in deck.keys():
-            self.cards[card] = Term(card, EOSDICT)
+            self.cards[card] = Term(card, EOSDICT, 'Eosdict')
 
 def main():
     p = User()
     p.add_deck(EOSDICT)
-    print(p.cards["order 66"].__str__())
     pprint(vars(p))
+    print(p.cards["order 66"].__str__())
+    p.cards["go"].print_stats()
 
 #print("Who is playing? ")
 #player = input('>')

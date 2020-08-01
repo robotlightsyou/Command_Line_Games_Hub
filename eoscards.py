@@ -14,7 +14,7 @@ their knowledge of ETC Eos terminology.
 * [ ] - add import deck functions that read a file/webpage and generates
         a new dictionary
 * [ ] - create User attribute to track different dictionaries
-* [ ] = why is return stats printing None? Why isn't it printing for all cards?
+* [ ] - why is return stats printing None? Why isn't it printing for all cards?
 * [ ] - fix play again so that it goes more than one cycle deep
 * [ ] - add function so user can choose duration of round
 * [ ] - did adding input validation break times answered counter?
@@ -91,11 +91,14 @@ class User():
         for card in deck.keys():
             self.cards[card] = Term(card, EOSDICT, 'Eosdict')
 
-
+#@TODO: Add menu function to clean player selection and offer print stats
 def main():
-    print("Who is playing? ")
-    player_name = input('>')
-    player = User(player_name)
+    #print("Who is playing? ")
+    #player_name = input('>')
+    #player = User(player_name)
+
+    player = get_player()
+
     # rewrite for multiple decks
     player.add_deck(EOSDICT)
     # pprint(vars(player))
@@ -104,9 +107,21 @@ def main():
     game_cards.extend(memory(player))
     play_again(player)
     return_stats(player, set(game_cards))
+    save_player(player)
 
 # @TODO: add function so user can choose duration of round
 
+def get_player():
+    print("Are you a returning player?\n[y/n]\n")
+    new = input('>')
+    if new == 'n':
+        user = new_player()
+    elif new == 'y':
+        user = load_player()
+    else:
+        print("Please enter 'y' or 'n'")
+        return get_player()
+    return user
 
 def memory(user):
     '''
@@ -200,8 +215,6 @@ def get_anspad(answer):
             tmpans = random.choice(list(EOSDICT.values()))
         if tmpans not in anspad:
             anspad.append(tmpans)
-        # else:
-        #    continue
     return anspad
 
 
@@ -216,8 +229,6 @@ def shuffle(anspad, answer):
     anspad.append(EOSDICT[answer])
     random.shuffle(anspad)
     return anspad
-
-# ask and answer an individual card
 
 
 def ask_q(answer, anspad, user):
@@ -316,7 +327,7 @@ def return_stats(user, recent_words):
         list of strings: recent_words
     Output:
         No output, prints to screen
-        '''
+    '''
     os.system('clear')
     print("In the last session you answered the following cards,")
     print("here's your stats for them:\n")
@@ -324,19 +335,35 @@ def return_stats(user, recent_words):
         print(user.cards[card].print_stats())
         print()
 
-###############
-# Save user data
-###############
+##################
+# Save user data #
+##################
 # @TODO: use shelve to open .db file
 
 
-def save_session(user):
+def save_player(user):
+    #@TODO: convert to 'with open' method
     d = shelve.open("myfile.db")
     d[user.name] = user
     d.close
 
 # @TODO: function to load user
+def new_player():
+    print("Who is playing? ")
+    player_name = input('>')
+    return User(player_name)
+
 # @TODO: user login? covered by asking user name and loading from there?
+def load_player():
+    print("Who is playing? ")
+    player_name = input('>')
+    d = shelve.open('myfile.db')
+    user = d[player_name]
+    d.close()
+    #with open('myfile.db', 'r') as loadfile:
+    #    user = loadfile[player_name]
+    return user
+
 # @TODO: update comments and documentation
 # @TODO: read csv and split entries into dictionary
 

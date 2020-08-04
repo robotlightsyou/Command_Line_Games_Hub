@@ -12,8 +12,6 @@ their knowledge of ETC Eos terminology.
         --> started - add file per user? add user folder?
 * [ ] - add import deck functions that read a file/webpage and generates
         a new dictionary
-* [ ] - rewrite DECk to allow new cards
-
 * [ ] - create User attribute to track different dictionaries
 * [ ] - why is return stats printing None? Why isn't it printing for all cards?
 * [ ] - fix play again so that it goes more than one cycle deep
@@ -368,11 +366,29 @@ def load_player():
     print("Who is playing? ")
     player_name = input('>')
     d = shelve.open('myfile')
-    user = d[player_name]
+    try:
+        user = d[player_name]
+    except KeyError:
+        d.close()
+        return no_name()
     d.close()
     # with open('myfile.db', 'r') as loadfile:
     #    user = loadfile[player_name]
     return user
+
+
+def no_name():
+    print("Sorry, I can't find that file. Would you like to:")
+    ans_list = ["Try a different name", "Start a new save"]
+    for index, value in enumerate(ans_list):
+        print(str(index + 1) + ') {}'.format(value))
+    response = valifate_response(ans_list)
+    if response == 0:
+        return load_player()
+    elif response == 1:
+        user = new_player()
+        user.add_deck(EOSDICT)
+        return user
 
 # @TODO: update comments and documentation
 # @TODO: read csv and split entries into dictionary

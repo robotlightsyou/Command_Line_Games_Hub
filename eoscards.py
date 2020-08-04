@@ -3,7 +3,6 @@
 '''
 This program is a command line text game that challenges the user on
 their knowledge of ETC Eos terminology.
-
 @TODOS:
 * [ ] - weight answers for user comfort/difficulty
 * [ ] - add GUI - most likely web inteface
@@ -19,7 +18,6 @@ their knowledge of ETC Eos terminology.
 * [ ] - add function so user can choose duration of round
 * [ ] - did adding input validation break times answered counter?
 * [X] - add try block for input validation in ask_q()
-
 * [X] - completed - change ask_q to be numbers to avoid str coersion
 * [X] - completed - Object inheritance is failing, research how to make objects
         sub-object(?) instances nb User.(variable).attribute
@@ -37,6 +35,7 @@ import time
 import os
 from pprint import pprint
 import shelve
+import pickle
 
 # dictionary of {terms:defintion}
 EOSDICT = {'go': 'execute a cue',
@@ -91,18 +90,20 @@ class User():
         for card in deck.keys():
             self.cards[card] = Term(card, EOSDICT, 'Eosdict')
 
-#@TODO: Add menu function to clean player selection and offer print stats
+# @TODO: Add menu function to clean player selection and offer print stats
+
+
 def main():
-    #print("Who is playing? ")
-    #player_name = input('>')
-    #player = User(player_name)
+    # print("Who is playing? ")
+    # player_name = input('>')
+    # player = User(player_name)
 
     player = get_player()
 
     # rewrite for multiple decks
-    player.add_deck(EOSDICT)
+    # player.add_deck(EOSDICT)
     # pprint(vars(player))
-    #print(player.cards["order 66"].__str__())
+    # print(player.cards["order 66"].__str__())
     game_cards = []
     game_cards.extend(memory(player))
     play_again(player)
@@ -111,17 +112,21 @@ def main():
 
 # @TODO: add function so user can choose duration of round
 
+
 def get_player():
     print("Are you a returning player?\n[y/n]\n")
     new = input('>')
-    if new == 'n':
+    if new.lower() == 'n':
         user = new_player()
-    elif new == 'y':
+        user.add_deck(EOSDICT)
+    elif new.lower() == 'y':
         user = load_player()
+        # user = load_player()
     else:
         print("Please enter 'y' or 'n'")
         return get_player()
     return user
+
 
 def memory(user):
     '''
@@ -152,7 +157,7 @@ def one_round(answered, correct, user):
     '''
     DOCSTRING: This function draws a card from the game deck, selects filler
     answers for multiple choice, queries the user, verifies the answer, updates
-    the user stats, and returns an updated deck. If user is correct card is 
+    the user stats, and returns an updated deck. If user is correct card is
     removed from the draw deck, if incorrect card may appear again in round.
     input:
         answered: a list of terms already correctly answered in game
@@ -244,20 +249,20 @@ def ask_q(answer, anspad, user):
         string: anspad[response]
     '''
     start_time = time.time()
-    #print(f"What is the definition of {answer}?\n")
+    # print(f"What is the definition of {answer}?\n")
     print("What is the definition of {}?\n".format(answer))
     print("1) {}\n2) {}\n3) {}\n4) {}\n\n".format(
         anspad[0], anspad[1], anspad[2], anspad[3]))
 #        f"1) {anspad[0]}\n2) {anspad[1]}\n3) {anspad[2]}\n4) {anspad[3]}\n\n")
     print("Answer: ")
     # add input verification
-    response = valifate_response()
+    response = valifate_response(anspad)
     end_time = time.time()
     user.cards[answer].update_time(start_time, end_time)
     return anspad[response]
 
 
-def valifate_response():
+def valifate_response(ans_list):
     '''
     DOCSTRING: This function actually gets the user's response and
     tests that it is one of the valid options
@@ -266,16 +271,15 @@ def valifate_response():
         integer: response
     '''
     response = -1
-    while response not in [0, 1, 2, 3]:
+    while response not in list(range(len(ans_list))):
         try:
             response = int(input('>')) - 1
         except ValueError:
             print("Please emter a valid response")
-    # while response not in [1, 2, 3, 4]:
-    if response not in [1, 2, 3, 0]:
+    # while response not in [1, 2, 3, 0]:
+    if (response) not in list(range(len(ans_list))):
         print("Please emter a valid response")
-        #response = input('>')
-        response = valifate_response()
+        response = valifate_response(ans_list)
     return response
 
 
@@ -342,25 +346,29 @@ def return_stats(user, recent_words):
 
 
 def save_player(user):
-    #@TODO: convert to 'with open' method
-    d = shelve.open("myfile.db")
+    # @TODO: convert to 'with open' method
+    d = shelve.open("myfile")
     d[user.name] = user
-    d.close
+    d.close()
 
 # @TODO: function to load user
+
+
 def new_player():
     print("Who is playing? ")
     player_name = input('>')
     return User(player_name)
 
 # @TODO: user login? covered by asking user name and loading from there?
+
+
 def load_player():
     print("Who is playing? ")
     player_name = input('>')
-    d = shelve.open('myfile.db')
+    d = shelve.open('myfile')
     user = d[player_name]
     d.close()
-    #with open('myfile.db', 'r') as loadfile:
+    # with open('myfile.db', 'r') as loadfile:
     #    user = loadfile[player_name]
     return user
 
@@ -370,6 +378,3 @@ def load_player():
 
 if __name__ == '__main__':
     main()
-
-
-# log scores and track user

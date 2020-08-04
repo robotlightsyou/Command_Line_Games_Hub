@@ -12,6 +12,8 @@ their knowledge of ETC Eos terminology.
         --> started - add file per user? add user folder?
 * [ ] - add import deck functions that read a file/webpage and generates
         a new dictionary
+* [ ] - rewrite DECk to allow new cards
+
 * [ ] - create User attribute to track different dictionaries
 * [ ] - why is return stats printing None? Why isn't it printing for all cards?
 * [ ] - fix play again so that it goes more than one cycle deep

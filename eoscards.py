@@ -17,6 +17,11 @@ their knowledge of ETC Eos terminology.
 * [ ] - fix play again so that it goes more than one cycle deep
 * [ ] - add function so user can choose duration of round
 * [ ] - did adding input validation break times answered counter?
+
+* [ ] - finish adding how_long()
+* [ ] - add times_correct to Term and print_stats()
+* [ ] - 
+
 * [X] - add try block for input validation in ask_q()
 * [X] - completed - change ask_q to be numbers to avoid str coersion
 * [X] - completed - Object inheritance is failing, research how to make objects
@@ -35,7 +40,6 @@ import time
 import os
 from pprint import pprint
 import shelve
-import pickle
 
 # dictionary of {terms:defintion}
 EOSDICT = {'go': 'execute a cue',
@@ -83,27 +87,18 @@ class Term():
 class User():
     def __init__(self, name):
         self.name = name
-        self.cards = {}
+        self.memory = {}
 
     # rewrite so any deck name can be added
     def add_deck(self, deck):
         for card in deck.keys():
-            self.cards[card] = Term(card, EOSDICT, 'Eosdict')
+            self.memory[card] = Term(card, EOSDICT, 'Eosdict')
 
 # @TODO: Add menu function to clean player selection and offer print stats
 
 
 def main():
-    # print("Who is playing? ")
-    # player_name = input('>')
-    # player = User(player_name)
-
     player = get_player()
-
-    # rewrite for multiple decks
-    # player.add_deck(EOSDICT)
-    # pprint(vars(player))
-    # print(player.cards["order 66"].__str__())
     game_cards = []
     game_cards.extend(memory(player))
     play_again(player)
@@ -111,21 +106,6 @@ def main():
     save_player(player)
 
 # @TODO: add function so user can choose duration of round
-
-
-def get_player():
-    print("Are you a returning player?\n[y/n]\n")
-    new = input('>')
-    if new.lower() == 'n':
-        user = new_player()
-        user.add_deck(EOSDICT)
-    elif new.lower() == 'y':
-        user = load_player()
-        # user = load_player()
-    else:
-        print("Please enter 'y' or 'n'")
-        return get_player()
-    return user
 
 
 def memory(user):
@@ -141,13 +121,14 @@ def memory(user):
     # past is a list of all cards played in session
     past = []
     correct = 0
+    tlimit = how_long()
     timer = time.time()
 
     # rewrite to allow multiple decks
     # while len(past) < len(EOSDICT):
     while len(past) < len(ANS_LIST):  # remove after debugging
         past = one_round(past, correct, user)
-        if time.time() - 30 > timer:
+        if time.time() - tlimit > timer:
             print("Time's up.")
             break
     return past
@@ -258,7 +239,7 @@ def ask_q(answer, anspad, user):
     # add input verification
     response = valifate_response(anspad)
     end_time = time.time()
-    user.cards[answer].update_time(start_time, end_time)
+    user.memory[answer].update_time(start_time, end_time)
     return anspad[response]
 
 
@@ -336,13 +317,44 @@ def return_stats(user, recent_words):
     print("In the last session you answered the following cards,")
     print("here's your stats for them:\n")
     for card in recent_words:
-        print(user.cards[card].print_stats())
+        print(user.memory[card].print_stats())
         print()
 
 ##################
 # Save user data #
 ##################
 # @TODO: use shelve to open .db file
+
+
+def how_long():
+    print('Enter how long you would like the round to last in seconds')
+    print('Minimum is 30 seconds, max is 120.\n')
+    time = input(">")
+    try:
+        time = int(time)
+        if 30 <= time <= 120:
+            return time
+        else:
+            print("please enter digits between 30-120")
+            return how_long()
+    except ValueError:
+        print("please enter digits between 30-120")
+        return how_long()
+
+
+def get_player():
+    print("Are you a returning player?\n[y/n]\n")
+    new = input('>')
+    if new.lower() == 'n':
+        user = new_player()
+        user.add_deck(EOSDICT)
+    elif new.lower() == 'y':
+        user = load_player()
+        # user = load_player()
+    else:
+        print("Please enter 'y' or 'n'")
+        return get_player()
+    return user
 
 
 def save_player(user):

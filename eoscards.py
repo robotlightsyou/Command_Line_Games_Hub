@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+# this is a test to see if ssh keys are working, delete soon.
 '''
 This program is a command line text game that challenges the user on
 their knowledge of ETC Eos terminology.

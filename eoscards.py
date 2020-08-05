@@ -19,7 +19,7 @@ their knowledge of ETC Eos terminology.
 * [ ] - did adding input validation break times answered counter?
 
 * [ ] - add times_correct to Term and print_stats()
-* [ ] -
+* [ ] - clean punctuation and formatting nb docstrings
 
 * [X] - add try block for input validation in ask_q()
 * [X] - completed - change ask_q to be numbers to avoid str coersion

@@ -74,7 +74,7 @@ def main():
     if game == 'Player Stats':
         return_stats(player, set(game_cards))
     elif game == 'Memory':
-        deck = dicts.DECKSDICT[choose_list(DECKLIST)]
+        deck = dicts.DICTS_DICT[choose_list(DECKLIST)]
         print(deck['__dict_name__'])
         game_cards = ['patch', 'macro', 'address']
         # game_cards = game_cards.extend(m.memory(player, deck))

@@ -18,9 +18,8 @@ their knowledge of ETC Eos terminology.
 * [ ] - add function so user can choose duration of round
 * [ ] - did adding input validation break times answered counter?
 
-* [ ] - finish adding how_long()
 * [ ] - add times_correct to Term and print_stats()
-* [ ] - 
+* [ ] -
 
 * [X] - add try block for input validation in ask_q()
 * [X] - completed - change ask_q to be numbers to avoid str coersion
@@ -33,6 +32,7 @@ their knowledge of ETC Eos terminology.
 * [X} - fix name prompt
 * [X] - completed - change ask_q to be numbers to avoid str coersion
   [X] --> timer added, troubleshoot methods
+* [X] - finish adding how_long()
 '''
 
 import random

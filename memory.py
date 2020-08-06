@@ -75,6 +75,7 @@ def one_round(answered, correct, user):
     if verify(ans, respond):
         answered.append(ans)
         correct += 1
+        user.memory[ans].update_correct()
     return answered
 
 

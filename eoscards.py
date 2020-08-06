@@ -16,7 +16,6 @@ their knowledge of ETC Eos terminology.
 * [ ] - create User attribute to track different dictionaries
 * [ ] - why is return stats printing None? Why isn't it printing for all cards?
 * [ ] - fix play again so that it goes more than one cycle deep
-* [ ] - add function so user can choose duration of round
 * [ ] - did adding input validation break times answered counter?
 
 * [ ] - add times_correct to Term and print_stats()
@@ -34,6 +33,7 @@ their knowledge of ETC Eos terminology.
 * [X] - completed - change ask_q to be numbers to avoid str coersion
   [X] --> timer added, troubleshoot methods
 * [X] - finish adding how_long()
+* [X] - add function so user can choose duration of round
 '''
 
 import random

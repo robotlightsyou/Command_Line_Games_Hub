@@ -14,14 +14,12 @@ import os
 from pprint import pprint
 import shelve
 import dicts
-#from . import dicts
-#from dicts import EOSDICT as eos
 import memory as m
 
-DECKSDICT = dicts.DICTS_DICT
+DECKSDICT = dicts.ALL_DECKS
 DECKLIST = list(DECKSDICT.keys())
 
-# add times correct attribute
+# fix updates so that they display  times correct
 
 
 class Term():
@@ -30,6 +28,7 @@ class Term():
         self .dict_name = shared_dict['__dict_name__']
         self.defi = shared_dict[name]
         self.times_answeered = 0
+        self.times_correct = 0
         self.avg_time = 0
         self.cum_time = 0
 
@@ -38,6 +37,11 @@ class Term():
         self.times_answeered += 1
         self.cum_time += ans_time
         self.avg_time = self.cum_time / self.times_answeered
+
+    # should be using setattr()?
+
+    def update_correct(self):
+        self.times_correct += 1
 
     def print_stats(self):
         print(self.__str__())
@@ -68,17 +72,18 @@ def main():
     # return_stats(player, set(game_cards))
     # save_player(player)
     player = get_player()
-    game_cards = []
-    game_cards = ['go', 'order 66', 'address']
+    session_cards = []
+    session_cards = ['go', 'order 66', 'address']
     game = choose_list(games_list)
     if game == 'Player Stats':
-        return_stats(player, set(game_cards))
+        return_stats(player, set(session_cards))
     elif game == 'Memory':
-        deck = dicts.DICTS_DICT[choose_list(DECKLIST)]
+        choice = choose_list(DECKLIST)
+        deck = dicts.ALL_DECKS[choice]
         print(deck['__dict_name__'])
-        game_cards = ['patch', 'macro', 'address']
-        # game_cards = game_cards.extend(m.memory(player, deck))
-    return_stats(player, set(game_cards))
+        # game_cards = ['patch', 'macro', 'address']
+        session_cards = session_cards.extend(m.memory(player, deck))
+    return_stats(player, set(session_cards))
     save_player(player)
 
 
@@ -92,7 +97,7 @@ def choose_game(games_list):
 
 
 def choose_list(options):
-    print('Which deck would you like to play?')
+    print('Which option would you like?')
     for index, value in enumerate(options):
         print(str(index + 1) + ') {}'.format(value))
     print()
@@ -134,6 +139,8 @@ def play_again(user):
     print("Enter 'y' or 'n'")
     if input('>')[0].lower() != 'n':
         m.memory(user)
+
+# fix so displays times correct primarily
 
 
 def return_stats(user, recent_words):

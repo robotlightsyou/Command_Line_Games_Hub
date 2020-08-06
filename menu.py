@@ -6,11 +6,25 @@ Ideally games can be run independently or from here.
         no input
     Output:
         no output, but can start games and write to memory.
+
+#@TODO:
+* [ ] - fix play_again so it goes more than 1 deep
+        --> skipping straight to displaying stats, in memory, not menu
+* [ ] - clean up preint formatting
+* [ ] - why is return_stats printing none? nb print(p(vars))
+* [ ] - fix add_deck to check if deck exists
+* [ ] - add ordered dict to printing dicts.ALL_DECKS
+* [ ] - force replay menu after time? nb anslist ran out of cards
+
+
+* [X] - fix anser/anspad selection so it ignores __dict_name__
+* [X] - fix return_stats shows times_correct, update methods
 '''
 
 import random
 import time
 import os
+import sys
 from pprint import pprint
 import shelve
 import dicts
@@ -46,6 +60,7 @@ class Term():
     def print_stats(self):
         print(self.__str__())
         print("Times answered: {}".format(self.times_answeered))
+        print("Times correct: {}".format(self.times_correct))
         print("Average Time: {:.1f}".format(self.avg_time))
 
     def __str__(self):
@@ -56,44 +71,16 @@ class User():
     def __init__(self, name):
         self.name = name
         self.memory = {}
+        self.memory_decks = []
 
     # rewrite so any deck name can be added
     def add_deck(self, deck):
-        for card in deck.keys():
-            self.memory[card] = Term(card, dicts.EOSDICT)
-
-
-def main():
-    games_list = ['Player Stats', 'Memory']
-    # player = get_player()
-    # game_cards = []
-    # game_cards.extend(m.memory(player))
-    # play_again(player)
-    # return_stats(player, set(game_cards))
-    # save_player(player)
-    player = get_player()
-    session_cards = []
-    session_cards = ['go', 'order 66', 'address']
-    game = choose_list(games_list)
-    if game == 'Player Stats':
-        return_stats(player, set(session_cards))
-    elif game == 'Memory':
-        choice = choose_list(DECKLIST)
-        deck = dicts.ALL_DECKS[choice]
-        print(deck['__dict_name__'])
-        # game_cards = ['patch', 'macro', 'address']
-        session_cards = session_cards.extend(m.memory(player, deck))
-    return_stats(player, set(session_cards))
-    save_player(player)
-
-
-def choose_game(games_list):
-    print('Enter the number for the game you want to play.')
-    for index, value in enumerate(games_list):
-        print(str(index + 1) + ') {}'.format(value))
-    print()
-    response = valifate_response(games_list)
-    return games_list[response]
+        name = deck['__dict_name__']
+        if name not in self.memory_decks:
+            self.memory_decks.append(name)
+            self.memory[name] = {}
+            for card in deck.keys():
+                self.memory[name][card] = Term(card, deck)
 
 
 def choose_list(options):
@@ -102,6 +89,7 @@ def choose_list(options):
         print(str(index + 1) + ') {}'.format(value))
     print()
     response = valifate_response(options)
+    print()
     return options[response]
 
 
@@ -119,14 +107,13 @@ def valifate_response(ans_list):
             response = int(input('>')) - 1
         except ValueError:
             print("Please emter a valid response")
-    # while response not in [1, 2, 3, 0]:
     if (response) not in list(range(len(ans_list))):
         print("Please emter a valid response")
         response = valifate_response(ans_list)
     return response
 
 
-def play_again(user):
+def play_again(user, deck):
     '''
     DOCSTRING: This function asks the user if they want to play again
     if yes, restart memory, if no then exit.
@@ -138,12 +125,12 @@ def play_again(user):
     print("{},\n\tWould you like to play again?".format(user.name))
     print("Enter 'y' or 'n'")
     if input('>')[0].lower() != 'n':
-        m.memory(user)
+        m.memory(user, deck)
 
 # fix so displays times correct primarily
 
 
-def return_stats(user, recent_words):
+def return_stats(user, recent_words, deck):
     '''
     DOCSTRING: This function takes in a user and a list of session
     words and prints that users stats with those cards
@@ -154,11 +141,15 @@ def return_stats(user, recent_words):
         No output, prints to screen
     '''
     os.system('clear')
-    print("In the last session you answered the following cards,")
+    print("{},".format(user.name))
+    print("    In the last session you answered the following cards,")
     print("here's your stats for them:\n")
     for card in recent_words:
-        print(user.memory[card].print_stats())
+        print(user.memory[deck['__dict_name__']][card].print_stats())
         print()
+    print()
+    input('Press enter to quit.')
+    os.system('clear')
 
 
 ##################
@@ -168,6 +159,7 @@ def return_stats(user, recent_words):
 def how_long():
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
+    print()
     time = input(">")
     try:
         time = int(time)
@@ -183,13 +175,14 @@ def how_long():
 
 def get_player():
     print("Are you a returning player?\n[y/n]\n")
+    print()
     new = input('>')
+    print()
     if new.lower() == 'n':
         user = new_player()
-        user.add_deck(dicts.EOSDICT)
+        # user.add_deck(dicts.EOSDICT)
     elif new.lower() == 'y':
         user = load_player()
-        # user = load_player()
     else:
         print("Please enter 'y' or 'n'")
         return get_player()
@@ -205,13 +198,17 @@ def save_player(user):
 
 def new_player():
     print("Who is playing? ")
+    print()
     player_name = input('>')
+    print()
     return User(player_name)
 
 
 def load_player():
     print("Who is playing? ")
+    print()
     player_name = input('>')
+    print()
     d = shelve.open('myfile')
     try:
         user = d[player_name]
@@ -229,6 +226,7 @@ def no_name():
     ans_list = ["Try a different name", "Start a new save"]
     for index, value in enumerate(ans_list):
         print(str(index + 1) + ') {}'.format(value))
+        print()
     response = valifate_response(ans_list)
     if response == 0:
         return load_player()
@@ -236,7 +234,7 @@ def no_name():
         user = new_player()
 
         # FIX DECK
-        user.add_deck(dicts.EOSDICT)
+        # user.add_deck(dicts.EOSDICT)
         return user
 
 # @TODO: update comments and documentation
@@ -244,4 +242,24 @@ def no_name():
 
 
 if __name__ == '__main__':
-    main()
+    os.system('clear')
+    games_list = ['Player Stats', 'Memory']
+    player = get_player()
+    session_cards = []
+    # failsafe until player db is finished
+    session_cards = ['go', 'order 66', 'address']
+    game = choose_list(games_list)
+    if game == 'Player Stats':
+        print("No stats yet")
+        input('Press enter to quit.')
+        sys.exit()
+        # return_stats(player, set(session_cards, deck))
+    elif game == 'Memory':
+        choice = choose_list(DECKLIST)
+        deck = dicts.ALL_DECKS[choice]
+        player.add_deck(deck)
+        print(deck['__dict_name__'])
+        game_cards, player = m.memory(player, deck)
+        session_cards.extend(game_cards)
+        return_stats(player, set(session_cards), deck)
+        save_player(player)

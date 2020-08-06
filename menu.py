@@ -8,17 +8,19 @@ Ideally games can be run independently or from here.
         no output, but can start games and write to memory.
 
 #@TODO:
-* [ ] - fix play_again so it goes more than 1 deep
-        --> skipping straight to displaying stats, in memory, not menu
-* [ ] - clean up preint formatting
+* [X] - fix play_again so it goes more than 1 deep
+        --> confirm returning user stas correctly
 * [ ] - why is return_stats printing none? nb print(p(vars))
-* [ ] - fix add_deck to check if deck exists
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
 * [ ] - force replay menu after time? nb anslist ran out of cards
-
+* [ ]  - validate new player doesn't exist
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
+* [X] - clean up preint formatting
+* [X] - fix add_deck to check if deck exists
+* [X] - play_again--> skipping straight to displaying stats, in memory, not menu
+
 '''
 
 import random
@@ -113,19 +115,19 @@ def valifate_response(ans_list):
     return response
 
 
-def play_again(user, deck):
-    '''
-    DOCSTRING: This function asks the user if they want to play again
-    if yes, restart memory, if no then exit.
-    Input:
-        User: user
-    Output:
-        No output, but can restart the game
-    '''
-    print("{},\n\tWould you like to play again?".format(user.name))
-    print("Enter 'y' or 'n'")
-    if input('>')[0].lower() != 'n':
-        m.memory(user, deck)
+# def play_again(user, deck):
+#     '''
+#     DOCSTRING: This function asks the user if they want to play again
+#     if yes, restart memory, if no then exit.
+#     Input:
+#         User: user
+#     Output:
+#         No output, but can restart the game
+#     '''
+#     print("{},\n\tWould you like to play again?".format(user.name))
+#     print("Enter 'y' or 'n'")
+#     if input('>')[0].lower() != 'n':
+#         m.memory(user, deck)
 
 # fix so displays times correct primarily
 
@@ -201,7 +203,17 @@ def new_player():
     print()
     player_name = input('>')
     print()
-    return User(player_name)
+    with shelve.open('myfile') as f:
+        try:
+            if f[player_name] == None:
+                pass  # return User(player_name)
+            else:
+                print("I already have a player with that name.")
+                print("Please try a different name:")
+                print()
+                return new_player()
+        except KeyError:
+            return User(player_name)
 
 
 def load_player():
@@ -261,5 +273,6 @@ if __name__ == '__main__':
         print(deck['__dict_name__'])
         game_cards, player = m.memory(player, deck)
         session_cards.extend(game_cards)
+        # m.play_again(player, deck)
         return_stats(player, set(session_cards), deck)
         save_player(player)

@@ -48,7 +48,9 @@ def memory(user, deck):
         past = one_round(past, correct, user, deck)
         if time.time() - tlimit > timer:
             print("Time's up.")
+            print()
             break
+    play_again(user, deck)
     return past, user
 
 
@@ -185,7 +187,7 @@ def verify(answer, response, deck):
 # fix non-looping issue for multiple game(in main?)
 
 
-def play_again(user):
+def play_again(user, deck):
     '''
     DOCSTRING: This function asks the user if they want to play again
     if yes, restart memory, if no then exit.
@@ -199,8 +201,28 @@ def play_again(user):
     if input('>')[0].lower() != 'n':
         memory(user, deck)
 
+# def play_again(user, deck):
+#     '''
+#     DOCSTRING: This function asks the user if they want to play again
+#     if yes, restart memory, if no then exit.
+#     Input:
+#         User: user
+#     Output:
+#         No output, but can restart the game
+#     '''
+#     print("{},\n\tWould you like to play again?".format(user.name))
+#     print("Enter 'y' or 'n'")
+#     print()
+#     x = 0
+#     while x == 0:
+#         if input('>')[0].lower() != 'n':
+#             memory(user, deck)
+#         elif input(">")[0].lower == 'n':
+#             x += 1
+
 
 if __name__ == '__main__':
     user = mu.get_player()
     deck = mu.choose_list(mu.DECKLIST)
     memory(user, deck)
+    play_again(user, deck)

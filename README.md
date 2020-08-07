@@ -18,10 +18,14 @@ python.
 Currently only a flash card game, but I have plans to expand some.
 
 run from command line with
-    ~~python3 ./eosflashcards 
+
+   ~~python3 ./eosflashcards 
    
-   menu.py #if shebang matches your interpreter, otherwise
-   python3 ./meny.py
+    menu.py 
+   
+    #if shebang matches your interpreter, otherwise
+   
+    python3 ./meny.py
     
 uses f strings so you need a newer python.
 

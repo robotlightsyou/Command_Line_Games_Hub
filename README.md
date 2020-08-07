@@ -19,7 +19,7 @@ Currently only a flash card game, but I have plans to expand some.
 
 run from command line with
 
-   ~~python3 ./eosflashcards ~~
+~~python3 ./eosflashcards ~~
    
     menu.py 
    

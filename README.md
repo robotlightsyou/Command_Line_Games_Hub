@@ -10,13 +10,18 @@ decks to the game by including a dictionary in dicts.py. You'll then need to
 add a key "__dict_name__" in the dictionary, as well as including the varible holding 
 dictionary in the DICTS_LIST to make it callable from menu.py.
 
+********
+
 This is a basic command line program written to gain experience writing
 python. 
 
 Currently only a flash card game, but I have plans to expand some.
 
 run from command line with
-    python3 ./eosflashcards
+    ~~python3 ./eosflashcards 
+   
+   menu.py #if shebang matches your interpreter, otherwise
+   python3 ./meny.py
     
 uses f strings so you need a newer python.
 

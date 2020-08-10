@@ -10,12 +10,14 @@ Ideally games can be run independently or from here.
 # @TODO:
 * [X] - fix play_again so it goes more than 1 deep
         --> confirm returning user stas correctly
-* [ ] - why is return_stats printing none? nb print(p(vars))
+* [ ] - why is return_stats printing none?
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
 * [ ] - force replay menu after time? nb anslist ran out of cards
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - @TODO: read csv and split entries into dictionary
+* [ ] - rewrite choose list to accept question phrase
+* [ ] - rewrite no_name() to use updated choose_list
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
@@ -26,11 +28,9 @@ Ideally games can be run independently or from here.
 
 '''
 
-# import random
-# import time
 import os
 import sys
-from pprint import pprint
+# from pprint import pprint
 import shelve
 import dicts
 import memory as m
@@ -85,7 +85,8 @@ class Term():
         print("Average Time: {:.1f}".format(self.avg_time))
 
     def __str__(self):
-        return "'{}': {}".format(self.name, self.defi)
+        # return "'{}': {}".format(self.name, self.defi)
+        return f"'{self.name}': {self.defi}"
 
 
 class User():
@@ -117,7 +118,7 @@ class User():
                 self.memory[name][card] = Term(card, deck)
 
 
-def choose_list(options):
+def choose_list(options, prompt):
     '''
     DOCSTRING: this function takes a list a returns the player's choice.
     Input:
@@ -126,7 +127,8 @@ def choose_list(options):
         object: the list item at the index of the player's choice, type
         depends on input.
     '''
-    print('Which option would you like?')
+    os.system('clear')
+    print(prompt)
     for index, value in enumerate(options):
         print(f'{index + 1}) {value}')
     print()
@@ -189,6 +191,7 @@ def how_long():
     Output:
         integer: time - number of seconds for the round to last
     '''
+    # os.system('clear')
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
     time = input(">")
@@ -211,6 +214,7 @@ def get_player():
     Output:
         User: user - the instance of the player.
     '''
+    os.system('clear')
     print("Are you a returning player?\n[y/n]\n")
     print()
     new = input('>')
@@ -251,6 +255,7 @@ def new_player():
     Output:
         User: user - the new User object created for the player.
     '''
+    # os.system('clear')
     print("Who is playing? ")
     print()
     player_name = input('>')
@@ -283,6 +288,7 @@ def load_player():
     Output:
         string: player_name - input from player
     '''
+    # os.system('clear')
     print("Who is playing? ")
     print()
     player_name = input('>')
@@ -329,7 +335,8 @@ if __name__ == '__main__':
     session_cards = []
     # failsafe until player db is finished
     # session_cards = ['go', 'order 66', 'address']
-    game = choose_list(games_list)
+    game_prompt = "What game would you like to play?"
+    game = choose_list(games_list, game_prompt)
    ################
    ###############
    # Fix this
@@ -338,10 +345,12 @@ if __name__ == '__main__':
         input('Press enter to quit.')
         sys.exit()
     elif game == 'Memory':
-        choice = choose_list(DECKLIST)
+        deck_prompt = "What deck would you like to play?"
+        choice = choose_list(DECKLIST, deck_prompt)
+        os.system('clear')
         deck = dicts.ALL_DECKS[choice]
         player.add_deck(deck)
-        print(deck['__dict_name__'])
+        # print(deck['__dict_name__'])
         game_cards, player = m.memory(player, deck)
         session_cards.extend(game_cards)
         return_stats(player, set(session_cards), deck)

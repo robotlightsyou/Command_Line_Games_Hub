@@ -199,6 +199,8 @@ def play_again(user, deck):
 
 if __name__ == '__main__':
     user = mu.get_player()
-    deck = mu.choose_list(mu.DECKLIST)
+    deck_prompt = "What deck would you like to play?"
+    deck = mu.choose_list(mu.DECKLIST, deck_prompt)
+    os.system('clear')
     memory(user, deck)
     play_again(user, deck)

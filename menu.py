@@ -315,15 +315,12 @@ def no_name():
     Output:
         User: user, if new selected. Else load_player()
     '''
-    print("Sorry, I can't find that file. Would you like to:")
+    noname_prompt = "Sorry, I can't find that file. Would you like to:"
     ans_list = ["Try a different name", "Start a new save"]
-    for index, value in enumerate(ans_list):
-        print(str(index + 1) + ') {}'.format(value))
-        print()
-    response = valifate_response(ans_list)
-    if response == 0:
+    response = choose_list(ans_list, noname_prompt)
+    if response == ans_list[0]:
         return load_player()
-    elif response == 1:
+    elif response == ans_list[1]:
         user = new_player()
         return user
 
@@ -333,8 +330,6 @@ if __name__ == '__main__':
     games_list = ['Player Stats', 'Memory']
     player = get_player()
     session_cards = []
-    # failsafe until player db is finished
-    # session_cards = ['go', 'order 66', 'address']
     game_prompt = "What game would you like to play?"
     game = choose_list(games_list, game_prompt)
    ################
@@ -350,7 +345,6 @@ if __name__ == '__main__':
         os.system('clear')
         deck = dicts.ALL_DECKS[choice]
         player.add_deck(deck)
-        # print(deck['__dict_name__'])
         game_cards, player = m.memory(player, deck)
         session_cards.extend(game_cards)
         return_stats(player, set(session_cards), deck)

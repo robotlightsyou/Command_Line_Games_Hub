@@ -16,8 +16,6 @@ Ideally games can be run independently or from here.
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - @TODO: read csv and split entries into dictionary
-* [ ] - rewrite choose list to accept question phrase
-* [ ] - rewrite no_name() to use updated choose_list
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
@@ -25,6 +23,8 @@ Ideally games can be run independently or from here.
 * [X] - fix add_deck to check if deck exists
 * [X] - play_again--> skipping straight to displaying stats, in memory, not menu
 * [X]  - validate new player doesn't exist
+* [X] - rewrite choose list to accept question phrase
+* [X] - rewrite no_name() to use updated choose_list
 
 '''
 
@@ -194,7 +194,7 @@ def how_long():
     # os.system('clear')
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
-    time = input(">")
+    time = input(">\n")
     try:
         time = int(time)
         if 30 <= time <= 120:
@@ -216,9 +216,7 @@ def get_player():
     '''
     os.system('clear')
     print("Are you a returning player?\n[y/n]\n")
-    print()
-    new = input('>')
-    print()
+    new = input('>\n')
     if new.lower() == 'n':
         user = new_player()
     elif new.lower() == 'y':
@@ -258,10 +256,8 @@ def new_player():
         User: user - the new User object created for the player.
     '''
     # os.system('clear')
-    print("Who is playing? ")
-    print()
-    player_name = input('>')
-    print()
+    print("Who is playing? \n")
+    player_name = input('>\n')
     with shelve.open('myfile') as f:
         try:
             ########################
@@ -271,8 +267,7 @@ def new_player():
                 pass  # return User(player_name)
             else:
                 print("I already have a player with that name.")
-                print("Please try a different name:")
-                print()
+                print("Please try a different name:\n")
                 return new_player()
         except KeyError:
             return User(player_name)
@@ -290,10 +285,8 @@ def load_player():
     Output:
         string: player_name - input from player
     '''
-    print("Who is playing? ")
-    print()
-    player_name = input('>')
-    print()
+    print("Who is playing? \n")
+    player_name = input('>\n')
     with shelve.open('myfile') as loadfile:
         try:
             user = loadfile[player_name]

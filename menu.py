@@ -240,9 +240,11 @@ def save_player(user):
     Output:
         no return but writes to file.
     '''
-    d = shelve.open("myfile")
-    d[user.name] = user
-    d.close()
+    # d = shelve.open("myfile")
+    # d[user.name] = user
+    # d.close()
+    with shelve.open('myfile') as savefile:
+        savefile[user.name] = user
 
 # @TODO: add option to load_player() if player exists
 
@@ -288,20 +290,15 @@ def load_player():
     Output:
         string: player_name - input from player
     '''
-    # os.system('clear')
     print("Who is playing? ")
     print()
     player_name = input('>')
     print()
-    d = shelve.open('myfile')
-    try:
-        user = d[player_name]
-    except KeyError:
-        d.close()
-        return no_name()
-    d.close()
-    # with open('myfile.db', 'r') as loadfile:
-    #    user = loadfile[player_name]
+    with shelve.open('myfile') as loadfile:
+        try:
+            user = loadfile[player_name]
+        except KeyError:
+            return no_name()
     return user
 
 

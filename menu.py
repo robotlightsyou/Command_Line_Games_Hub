@@ -81,9 +81,9 @@ class Term():
 
     def print_stats(self):
         print(self.__str__())
-        print("Times answered: {}".format(self.times_answeered))
-        print("Times correct: {}".format(self.times_correct))
-        print("Average Time: {:.1f}".format(self.avg_time))
+        print(f"Times answered: {self.times_answeered}")
+        print(f"Times correct: {self.times_correct}")
+        print(f"Average Time: {self.avg_time:.1f}")
 
     def __str__(self):
         # return "'{}': {}".format(self.name, self.defi)
@@ -174,7 +174,7 @@ def return_stats(user, recent_words, deck):
         No output, prints to screen
     '''
     os.system('clear')
-    print("{},".format(user.name))
+    print(f"{user.name}")
     print("    In the last session you answered the following cards,")
     print("here's your stats for them:\n")
     for card in recent_words:
@@ -228,8 +228,6 @@ def get_player():
         return get_player()
     return user
 
-# @TODO: convert to 'with open' method
-
 
 def save_player(user):
     '''
@@ -240,9 +238,6 @@ def save_player(user):
     Output:
         no return but writes to file.
     '''
-    # d = shelve.open("myfile")
-    # d[user.name] = user
-    # d.close()
     with shelve.open('myfile') as savefile:
         savefile[user.name] = user
 
@@ -260,6 +255,7 @@ def new_player():
     # os.system('clear')
     print("Who is playing? \n")
     player_name = input('>')
+    print()
     with shelve.open('myfile') as f:
         try:
             ########################
@@ -275,9 +271,6 @@ def new_player():
             return User(player_name)
 
 
-# @TODO: rewrite to with open method
-
-
 def load_player():
     '''
     DOCSTRING: this functions loads a player from the save if they exist.
@@ -289,6 +282,7 @@ def load_player():
     '''
     print("Who is playing? \n")
     player_name = input('>')
+    print()
     with shelve.open('myfile') as loadfile:
         try:
             user = loadfile[player_name]

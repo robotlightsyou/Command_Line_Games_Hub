@@ -44,7 +44,7 @@ def memory(user, deck):
     timer = time.time()
     while len(past) < len(deck):
         past = one_round(past, correct, user, deck)
-        #add 1 second to account for displaying results
+        # add 1 second to account for displaying results
         timer += 1
         if time.time() - tlimit > timer:
             print("Time's up.")
@@ -189,7 +189,7 @@ def play_again(user, deck):
     Output:
         No output, but can restart the game
     '''
-    print("{},\n\tWould you like to play again?".format(user.name))
+    print(f"{user.name},\n\tWould you like to play again?")
     print("Enter 'y' or 'n'")
     if input('>')[0].lower() != 'n':
         memory(user, deck)

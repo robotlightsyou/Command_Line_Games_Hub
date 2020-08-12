@@ -14,9 +14,10 @@ DOCSTRING: This program runs a basic memory card game. If memory() is
             from te most recent round
         user - an update User instance
 '''
-# @TODO: in return stats keep screen locked to top instead of following
-# printing
 
+###############
+##  IMPORTS  ##
+###############
 import random
 import time
 import os
@@ -26,6 +27,9 @@ import menu as mu
 import dicts
 
 
+#################
+##  FUNCTIONS  ##
+#################
 def memory(user, deck):
     '''
     DOCSTRING: This function is the main gameplay of the memory card
@@ -50,7 +54,6 @@ def memory(user, deck):
             print("Time's up.")
             print()
             break
-    # play_again(user, deck)
     return past, user
 
 

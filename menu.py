@@ -16,7 +16,6 @@ Ideally games can be run independently or from here.
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - @TODO: read csv and split entries into dictionary
-* [ ] - how to fix recursive return_stats issue?
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
@@ -26,9 +25,13 @@ Ideally games can be run independently or from here.
 * [X]  - validate new player doesn't exist
 * [X] - rewrite choose list to accept question phrase
 * [X] - rewrite no_name() to use updated choose_list
+* [X] - how to fix recursive return_stats issue?
 
 '''
 
+###############
+##  IMPORTS  ##
+###############
 import os
 import sys
 # from pprint import pprint
@@ -36,10 +39,15 @@ import shelve
 import dicts
 import memory as m
 
+#################
+##  CONSTANTS  ##
+#################
 DECKSDICT = dicts.ALL_DECKS
 DECKLIST = list(DECKSDICT.keys())
 
-
+###############
+##  CLASSES  ##
+###############
 class Term():
     '''
     DOCSTRING: these are the actual memory cards, they contain the
@@ -119,6 +127,9 @@ class User():
                 self.memory[name][card] = Term(card, deck)
 
 
+##################
+##  GAME SETUP  ##
+##################
 def choose_list(options, prompt):
     '''
     DOCSTRING: this function takes a list a returns the player's choice.
@@ -136,53 +147,6 @@ def choose_list(options, prompt):
     response = valifate_response(options)
     print()
     return options[response]
-
-
-def valifate_response(ans_list):
-    '''
-    DOCSTRING: This function actually gets the user's response and
-    tests that it is one of the valid options
-    Input:
-        list: - ans_list - the options printed by choose_list()
-        integer: input by player during execution.
-    Output:
-        integer: response
-    '''
-    response = -1
-    while response not in list(range(len(ans_list))):
-        try:
-            response = int(input('>')) - 1
-        except ValueError:
-            print("Please emter a valid response")
-    if (response) not in list(range(len(ans_list))):
-        print("Please emter a valid response")
-        response = valifate_response(ans_list)
-    return response
-
-# @TODO: pretty print this so user doesn't have to scroll back to top.
-
-
-def return_stats(user, recent_words, deck):
-    '''
-    DOCSTRING: This function takes in a user and a list of session
-    words and prints that users stats with those cards
-    Input:
-        User: user
-        list of strings: recent_words
-        dictionary: deck - the dictionary being tested
-    Output:
-        No output, prints to screen
-    '''
-    os.system('clear')
-    print(f"{user.name}")
-    print("    In the last session you answered the following cards,")
-    print("here's your stats for them:\n")
-    for card in recent_words:
-        print(user.memory[deck['__dict_name__']][card].print_stats())
-        print()
-    print()
-    input('                                        Press enter to quit.')
-    os.system('clear')
 
 
 def how_long():
@@ -208,6 +172,45 @@ def how_long():
         return how_long()
 
 
+def valifate_response(ans_list):
+    '''
+    DOCSTRING: This function actually gets the user's response and
+    tests that it is one of the valid options
+    Input:
+        list: - ans_list - the options printed by choose_list()
+        integer: input by player during execution.
+    Output:
+        integer: response
+    '''
+    response = -1
+    while response not in list(range(len(ans_list))):
+        try:
+            response = int(input('>')) - 1
+        except ValueError:
+            print("Please emter a valid response")
+    if (response) not in list(range(len(ans_list))):
+        print("Please emter a valid response")
+        response = valifate_response(ans_list)
+    return response
+
+
+def choose_deck():
+    deck_prompt = "What deck would you like to play?"
+    choice = choose_list(DECKLIST, deck_prompt)
+    deck = dicts.ALL_DECKS[choice]
+    os.system('clear')
+    return deck
+
+
+def play_memory(player, session_cards, deck):
+    game_cards, player = m.memory(player, deck)
+    session_cards.extend(game_cards)
+    play_again(player, session_cards, deck)
+
+
+####################
+##  PLAYER SETUP  ##
+####################
 def get_player():
     '''
     DOCSTRING: this is a helper funtion to direct player to new_player()
@@ -229,21 +232,6 @@ def get_player():
     return user
 
 
-def save_player(user):
-    '''
-    DOCSTRING: this functions opens the local savefile and updates with
-        the player, or creates the savefile if none exists.
-    Input:
-        User: user - the player from this session
-    Output:
-        no return but writes to file.
-    '''
-    with shelve.open('myfile') as savefile:
-        savefile[user.name] = user
-
-# @TODO: add option to load_player() if player exists
-
-
 def new_player():
     '''
     DOCSTRING: this function takes in a player's name and checks it against
@@ -256,12 +244,12 @@ def new_player():
     print("Who is playing? \n")
     player_name = input('>')
     print()
-    with shelve.open('myfile') as f:
+    with shelve.open('myfile') as loadfile:
         try:
-            ########################
-            ##      FIX THIS      ##
-            ########################
-            if f[player_name] == None:
+            ################
+            ##  FIX THIS  ##
+            ################
+            if loadfile[player_name] == None:
                 pass  # return User(player_name)
             else:
                 print("I already have a player with that name.")
@@ -310,7 +298,51 @@ def no_name():
         user = new_player()
         return user
 
-def play_again(user, deck):
+
+def save_player(user):
+    '''
+    DOCSTRING: this functions opens the local savefile and updates with
+        the player, or creates the savefile if none exists.
+    Input:
+        User: user - the player from this session
+    Output:
+        no return but writes to file.
+    '''
+    with shelve.open('myfile') as savefile:
+        savefile[user.name] = user
+
+
+#################
+##  POST GAME  ##
+#################
+
+# @TODO: pretty print this so user doesn't have to scroll back to top.
+
+
+def return_stats(user, recent_words, deck):
+    '''
+    DOCSTRING: This function takes in a user and a list of session
+    words and prints that users stats with those cards
+    Input:
+        User: user
+        list of strings: recent_words
+        dictionary: deck - the dictionary being tested
+    Output:
+        No output, prints to screen
+    '''
+    os.system('clear')
+    print(f"{user.name},")
+    print("    In the last session you answered the following cards,")
+    print("here's your stats for them:\n")
+    for card in recent_words:
+        print(user.memory[deck['__dict_name__']][card].print_stats())
+        print()
+    print()
+    input('                                        Press enter to quit.')
+    os.system('clear')
+
+
+def play_again(user, session_cards, deck):
     '''
     DOCSTRING: This function asks the user if they want to play again
     if yes, restart memory, if no then exit.
@@ -319,22 +351,12 @@ def play_again(user, deck):
     Output:
         No output, but can restart the game
     '''
-    # print("{},\n\tWould you like to play again?".format(user.name))
     print(f"{user.name},\n\tWould you like to play again?")
     print("Enter 'y' or 'n'\n")
     if input('>')[0].lower() != 'n':
-        play_memory(user, session_cards)
+        peint()
+        play_memory(user, session_cards, deck)
 
-def play_memory(player, session_cards):
-    deck_prompt = "What deck would you like to play?"
-    choice = choose_list(DECKLIST, deck_prompt)
-    os.system('clear')
-    deck = dicts.ALL_DECKS[choice]
-    player.add_deck(deck)
-    game_cards, player = m.memory(player, deck)
-    session_cards.extend(game_cards)
-    play_again(player, session_cards)
-    return_stats(player, set(session_cards), deck)
 
 if __name__ == '__main__':
     os.system('clear')
@@ -342,14 +364,17 @@ if __name__ == '__main__':
     games_list = ['Player Stats', 'Memory']
     game_prompt = "What game would you like to play?"
     game = choose_list(games_list, game_prompt)
-   ################
-   ###############
-   # Fix this
+    ################
+    ##  Fix this  ##
+    ################
     if game == 'Player Stats':
         print("No stats yet")
         input('Press enter to quit.')
         sys.exit()
     elif game == 'Memory':
         session_cards = []
-        play_memory(player, session_cards)
+        deck = choose_deck()
+        player.add_deck(deck)
+        play_memory(player, session_cards, deck)
+        return_stats(player, set(session_cards), deck)
     save_player(player)

@@ -44,11 +44,13 @@ def memory(user, deck):
     timer = time.time()
     while len(past) < len(deck):
         past = one_round(past, correct, user, deck)
+        #add 1 second to account for displaying results
+        timer += 1
         if time.time() - tlimit > timer:
             print("Time's up.")
             print()
             break
-    play_again(user, deck)
+    # play_again(user, deck)
     return past, user
 
 
@@ -93,10 +95,9 @@ def get_ans(answered, deck):
     while True:
         # answer = pick random entry
         answer = random.choice(list(deck.keys()))
-        # answer = random.choice(ANS_LIST)  # remove after debugging
         # compare answer against previous game answer
         if answer not in answered:
-            if answer != deck['__dict_name__']:
+            if answer != '__dict_name__':
                 break
     return answer
 
@@ -150,9 +151,6 @@ def ask_q(answer, anspad, user, deck):
     '''
     start_time = time.time()
     print(f"What is the definition of {answer}?\n")
-    # print("What is the definition of {}?\n".format(answer))
-    # print("1) {}\n2) {}\n3) {}\n4) {}\n\n".format(
-    # anspad[0], anspad[1], anspad[2], anspad[3]))
     print(
         f"1) {anspad[0]}\n2) {anspad[1]}\n3) {anspad[2]}\n4) {anspad[3]}\n\n")
     print("Answer: ")

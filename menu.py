@@ -16,6 +16,7 @@ Ideally games can be run independently or from here.
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - @TODO: read csv and split entries into dictionary
+* [ ] - how to fix recursive return_stats issue?
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
@@ -194,7 +195,7 @@ def how_long():
     # os.system('clear')
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
-    time = input(">\n")
+    time = input(">")
     try:
         time = int(time)
         if 30 <= time <= 120:
@@ -216,7 +217,8 @@ def get_player():
     '''
     os.system('clear')
     print("Are you a returning player?\n[y/n]\n")
-    new = input('>\n')
+    new = input('>')
+    print()
     if new.lower() == 'n':
         user = new_player()
     elif new.lower() == 'y':
@@ -257,7 +259,7 @@ def new_player():
     '''
     # os.system('clear')
     print("Who is playing? \n")
-    player_name = input('>\n')
+    player_name = input('>')
     with shelve.open('myfile') as f:
         try:
             ########################
@@ -286,7 +288,7 @@ def load_player():
         string: player_name - input from player
     '''
     print("Who is playing? \n")
-    player_name = input('>\n')
+    player_name = input('>')
     with shelve.open('myfile') as loadfile:
         try:
             user = loadfile[player_name]
@@ -314,12 +316,36 @@ def no_name():
         user = new_player()
         return user
 
+def play_again(user, deck):
+    '''
+    DOCSTRING: This function asks the user if they want to play again
+    if yes, restart memory, if no then exit.
+    Input:
+        User: user
+    Output:
+        No output, but can restart the game
+    '''
+    # print("{},\n\tWould you like to play again?".format(user.name))
+    print(f"{user.name},\n\tWould you like to play again?")
+    print("Enter 'y' or 'n'\n")
+    if input('>')[0].lower() != 'n':
+        play_memory(user, session_cards)
+
+def play_memory(player, session_cards):
+    deck_prompt = "What deck would you like to play?"
+    choice = choose_list(DECKLIST, deck_prompt)
+    os.system('clear')
+    deck = dicts.ALL_DECKS[choice]
+    player.add_deck(deck)
+    game_cards, player = m.memory(player, deck)
+    session_cards.extend(game_cards)
+    play_again(player, session_cards)
+    return_stats(player, set(session_cards), deck)
 
 if __name__ == '__main__':
     os.system('clear')
-    games_list = ['Player Stats', 'Memory']
     player = get_player()
-    session_cards = []
+    games_list = ['Player Stats', 'Memory']
     game_prompt = "What game would you like to play?"
     game = choose_list(games_list, game_prompt)
    ################
@@ -330,12 +356,6 @@ if __name__ == '__main__':
         input('Press enter to quit.')
         sys.exit()
     elif game == 'Memory':
-        deck_prompt = "What deck would you like to play?"
-        choice = choose_list(DECKLIST, deck_prompt)
-        os.system('clear')
-        deck = dicts.ALL_DECKS[choice]
-        player.add_deck(deck)
-        game_cards, player = m.memory(player, deck)
-        session_cards.extend(game_cards)
-        return_stats(player, set(session_cards), deck)
-        save_player(player)
+        session_cards = []
+        play_memory(player, session_cards)
+    save_player(player)

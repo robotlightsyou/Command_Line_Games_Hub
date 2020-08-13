@@ -7,13 +7,6 @@ DOCSTRING: This file is for storing python dictionaries with terms and
 '''
 
 
-# TESTDECK = {'go': 'execute a cue',
-#             'address': 'the digital location of an instrument',
-#             'submaster': 'not a fader',
-#             'fader': 'a playback for cuelists and other record targets',
-#             'order 66': 'shutdown macro',
-#             '__dict_name__': 'Sample Deck'}
-
 # dictionary of {terms:defintion}
 TESTDECK = {'go': 'execute a cue',
            'stop': 'pause a cue',
@@ -29,15 +22,6 @@ TESTDECK = {'go': 'execute a cue',
            'order 66': 'shutdown macro',
            'macro': 'recorded commands replayed on a single keypress',
            '__dict_name__': 'Sample Deck'}
-# ALL_DECKS = {'Eos Terms': EOSDICT, 'Sample Deck': TESTDECK}
-
-test = {'Absolute Data': 'Absolute data is the term denoting that a parametere has been established manual control, rather than a palette, preset, or cue.',
-           'Absolute Effect': 'Am absolute effect provides a list of sequential actions channels are to take.',
-           'Active': 'A term defining a luminaire with intensity greater than 0. Also, a cue currently in use on a playback fader or submaster is considered active.',
-           'Assert': 'An attribute that can be applied to a selected channel, parameter, cue, or cue part that forces the replay of tracked values.'}
-
-
-
 
 
 EOSDICT = {'Auto-Mark': 'The act of automatically presetting lights (also known as Move While Dark or Move Before Bright).  Auto-Marks are trigger when intensity is fading from zero to an active level, and the channels associated non-intensity parameters (NIPs) have move instructions.  The NIPS will actually preset in the previous cue.  Auto-Mark is a setup option.  When enabled, it may be disabled on a per cue or cue part basis, enabling live moves.',

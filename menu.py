@@ -8,11 +8,8 @@ Ideally games can be run independently or from here.
         no output, but can start games and write to memory.
 
 # @TODO:
-* [X] - fix play_again so it goes more than 1 deep
-        --> confirm returning user stas correctly
 * [ ] - why is return_stats printing none?
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
-* [ ] - force replay menu after time? nb anslist ran out of cards
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - @TODO: read csv and split entries into dictionary
@@ -26,6 +23,8 @@ Ideally games can be run independently or from here.
 * [X] - rewrite choose list to accept question phrase
 * [X] - rewrite no_name() to use updated choose_list
 * [X] - how to fix recursive return_stats issue?
+* [X] - fix play_again so it goes more than 1 deep
+* [X] - --> confirm returning user stas correctly
 
 '''
 

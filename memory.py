@@ -4,15 +4,14 @@
 DOCSTRING: This program runs a basic memory card game. If memory() is
     called for the menu it will take arguments, but if the program
     is runa s main the user will still be prompted for input.
-    This docstring sucks, write better.
     Input:
-        user: User, who is playing the game.
-        deck: a {dictionary} of terms and definitions
-        tlimit: integer - the time limit in seconds for the game
+        User: user, who is playing the game.
+        dictionary: deck - a dictionary of terms and definitions
+        integer: tlimit  - the time limit in seconds for the game
     Output:
-        cards_played - a [list] of strings representing the card names
+        list: cards_played - a list of strings representing the card names
             from te most recent round
-        user - an update User instance
+        User: user - an update User instance
 '''
 
 ###############
@@ -63,12 +62,12 @@ def one_round(answered, correct, user, deck):
     answers for multiple choice, queries the user, verifies the answer, updates
     the user stats, and returns an updated deck. If user is correct card is
     removed from the draw deck, if incorrect card may appear again in round.
-    input:
-        answered: a list of terms already correctly answered in game
-        correct: an integer representing total correct in game
-        user: the profile to receive stats update
-    output:
-        answered: a list of correctly answered terms in this individual game.
+    Input:
+        list: answered - a list of terms already correctly answered in game
+        integer: correct - an integer representing total correct in game
+        User: user - the profile to receive stats update
+    Output:
+        list: answered - a list of correctly answered terms in this individual game.
     '''
     time.sleep(1)
     os.system('clear')
@@ -183,7 +182,7 @@ def verify(answer, response, deck):
         return False
 
 
-def play_again(user, deck):
+def m_play_again(user, deck):
     '''
     DOCSTRING: This function asks the user if they want to play again
     if yes, restart memory, if no then exit.
@@ -204,4 +203,4 @@ if __name__ == '__main__':
     deck = mu.choose_list(mu.DECKLIST, deck_prompt)
     os.system('clear')
     memory(user, deck)
-    play_again(user, deck)
+    m_play_again(user, deck)

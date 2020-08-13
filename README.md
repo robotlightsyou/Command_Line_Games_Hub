@@ -7,7 +7,7 @@ you need menu.py, memory.py, and dicts.py all in the same folder, then run menu.
 and make your selection. Player Stats in the early menu is broken, but memory works, 
 and printing player stats at the end of the game functions. You can add your own 
 decks to the game by including a dictionary in dicts.py. You'll then need to 
-add a key "__dict_name__" in the dictionary, as well as including the varible holding 
+add a key "\_\_dict_name\_\_" in the dictionary, as well as including the varible holding 
 dictionary in the DICTS_LIST to make it callable from menu.py.
 
 ********
@@ -18,14 +18,8 @@ python.
 Currently only a flash card game, but I have plans to expand some.
 
 run from command line with
-
-~~python3 ./eosflashcards ~~
    
-    menu.py 
-   
-    #if shebang matches your interpreter, otherwise
-   
-    python3 ./meny.py
+    python3 menu.py
     
 uses f strings so you need a newer python.
 

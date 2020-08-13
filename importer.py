@@ -8,6 +8,7 @@
 import re
 import csv
 import pprint
+import sys
 
 
 with open('eoslong.csv', 'r') as f:
@@ -31,7 +32,8 @@ with open('eoslong.csv', 'r') as f:
             v = v.replace(occurance, "*****")
         result[k] = v
     with open('dicts.py', 'a') as out:
-        out.write('\n\nEOSDICT = {')
+        out.write("\n\n{} = {{".format(sys.argv[1]))
+        out.write("'__dict_name__': '{}',\n".format(sys.argv[2]))
         for k,v in result.items():
             out.write(f"'{k}': '{v}',\n")
         out.write('}')

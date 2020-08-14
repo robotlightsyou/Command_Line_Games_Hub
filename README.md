@@ -51,7 +51,7 @@ Installation:
 
 clone repository and run from command line using:
     
-    *python menu.py
+    python menu.py
     
 Requirements:
 

@@ -1,8 +1,15 @@
 #!/usr/bin/python3
 
-
-#@TODO: use re module to censor defs nb ATBS chapter
-#@TODO: accept command line args for __dict_name__
+'''
+DOCSTRING: This program loads dictionaries into dicts.py. Reads one
+    column CSVs where the start of the cell is the term, then there
+    is a colon(:), and the rest of the cell is the definition.
+Input: program takes 3 command line arguments, 1) the source file
+    for the definitions. 2) the name of the variable for the dictionary 
+    in dicts.py. 3) the pretty print name of the dictionary, put in quotes
+    if more than one word.
+Output: No output, but appends to dicts.py
+'''
 
 
 import re
@@ -11,7 +18,7 @@ import pprint
 import sys
 
 
-with open('eoslong.csv', 'r') as f:
+with open(sys.argv[1], 'r') as f:
     reader = csv.reader(f)
     result = {}
     for row in reader:
@@ -32,8 +39,8 @@ with open('eoslong.csv', 'r') as f:
             v = v.replace(occurance, "*****")
         result[k] = v
     with open('dicts.py', 'a') as out:
-        out.write("\n\n{} = {{".format(sys.argv[1]))
-        out.write("'__dict_name__': '{}',\n".format(sys.argv[2]))
+        out.write("\n\n{} = {{".format(sys.argv[2]))
+        out.write("'__dict_name__': '{}',\n".format(sys.argv[3]))
         for k,v in result.items():
             out.write(f"'{k}': '{v}',\n")
         out.write('}')

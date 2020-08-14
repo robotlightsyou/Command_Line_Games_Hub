@@ -36,6 +36,7 @@ def memory(user, deck):
     a list of cards answered
     Input:
         User: user
+        deck: dictionary -the terms the player is being quizzed on
     Output:
         List: game_cards
         User: the updated user object.
@@ -84,12 +85,12 @@ def one_round(answered, correct, user, deck):
 
 def get_ans(answered, deck):
     '''
-    DOCSTRING: This function takes in a list answered and a dictionaey
-    EOSDICT. It selects a random entry from the dictionary and compares
+    DOCSTRING: This function takes in a list answered and a dictionary
+    deck. It selects a random entry from the dictionary and compares
     against the previous answers in the answered list.
     Input:
         list: answered to ensure no repeats
-        dict: deck name, currently hard coded to EOSDICT
+        dict: deck name
     Output:
         string: answer
     '''
@@ -185,7 +186,8 @@ def verify(answer, response, deck):
 def m_play_again(user, deck):
     '''
     DOCSTRING: This function asks the user if they want to play again
-    if yes, restart memory, if no then exit.
+    if yes, restart memory, if no then exit. Name is such to distinguish
+    from play_again normally run through menu.py.
     Input:
         User: user
     Output:

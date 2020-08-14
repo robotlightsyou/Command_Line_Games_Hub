@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+
+
 '''
 DOCSTRING: This program serves as a hub for simple command line games.
 Ideally games can be run independently or from here.
@@ -12,7 +14,6 @@ Ideally games can be run independently or from here.
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
-* [ ] - @TODO: read csv and split entries into dictionary
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods
@@ -25,8 +26,10 @@ Ideally games can be run independently or from here.
 * [X] - how to fix recursive return_stats issue?
 * [X] - fix play_again so it goes more than 1 deep
 * [X] - --> confirm returning user stas correctly
+* [X] - @TODO: read csv and split entries into dictionary
 
 '''
+
 
 ###############
 ##  IMPORTS  ##
@@ -38,11 +41,13 @@ import shelve
 import dicts
 import memory as m
 
+
 #################
 ##  CONSTANTS  ##
 #################
 DECKSDICT = dicts.ALL_DECKS
 DECKLIST = list(DECKSDICT.keys())
+
 
 ###############
 ##  CLASSES  ##
@@ -56,10 +61,10 @@ class Term():
         dict: shared_dict - the dictionary/deck containing this card
     '''
 
-    def __init__(self, name, shared_dict):
+    def __init__(self, name, Deck):
         self.name = name
-        self .dict_name = shared_dict['__dict_name__']
-        self.defi = shared_dict[name]
+        self .dict_name = Deck['__dict_name__']
+        self.defi = Deck[name]
         self.times_answeered = 0
         self.times_correct = 0
         self.avg_time = 0
@@ -107,6 +112,7 @@ class User():
 
     def __init__(self, name):
         self.name = name
+        #create a dictionary for each game to store User history
         self.memory = {}
         self.memory_decks = []
 
@@ -131,7 +137,7 @@ class User():
 ##################
 def choose_list(options, prompt):
     '''
-    DOCSTRING: this function takes a list a returns the player's choice.
+    DOCSTRING: this function takes a list and returns the player's choice.
     Input:
         list - options - a list of choices to be printed
     Output:
@@ -159,6 +165,7 @@ def how_long():
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
     time = input(">")
+    print()
     try:
         time = int(time)
         if 30 <= time <= 120:
@@ -239,7 +246,6 @@ def new_player():
     Output:
         User: user - the new User object created for the player.
     '''
-    # os.system('clear')
     print("Who is playing? \n")
     player_name = input('>')
     print()

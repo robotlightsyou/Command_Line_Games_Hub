@@ -13,8 +13,8 @@ with the option to load a player or start a new save. Next you will be
 asked which game you would like to play. After there may be some setups
 screens before the game is started.
 
-To do - move Term to memory for cleanliness?
-To do - create seesion class to better track session attributes
+* To do - move Term to memory for cleanliness?
+* To do - create seesion class to better track session attributes
 
 Memory.py
 
@@ -37,9 +37,9 @@ the definition, but it is a brute tool that will likely require manual
 editing. After importing copy ALL_DICTS to the end of the file, and add
 and entry for the new deck you just uploaded.
 
-To do - add 2 column option(one term, ne def)
-To do - insert new dict before ALL_DICTS
-To do - add new dict to ALL_DICTS
+* To do - add 2 column option(one term, ne def)
+* To do - insert new dict before ALL_DICTS
+* To do - add new dict to ALL_DICTS
 
 Dicts.py
 
@@ -50,7 +50,8 @@ Make sure to update ALL_DICTS if you do add a deck.
 Installation:
 
 clone repository and run from command line using:
-    python menu.py
+    
+    *python menu.py
     
 Requirements:
 

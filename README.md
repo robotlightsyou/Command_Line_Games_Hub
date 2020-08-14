@@ -1,12 +1,12 @@
 # Command Line Games Hub
 
-Update: 14 Aug
+## Update: 14 Aug
 
 Command Line Games Hub is a central player tracker for games. Presently
 the only functioning game is Flash Cards, but more are in development. 
 Ultimately the plan is to migrate to a Django driven web app.
 
-Menu.py
+### Menu.py
 
 Menu is the actual hub. When this program is run you will be presented
 with the option to load a player or start a new save. Next you will be
@@ -16,7 +16,7 @@ screens before the game is started.
 * To do - move Term to memory for cleanliness?
 * To do - create seesion class to better track session attributes
 
-Memory.py
+### Memory.py
 
 The engine for the flash card game. Can be run from menu.py or called
 independently. If run from menu player stats will be tracked and multiple
@@ -27,7 +27,7 @@ quick round.
 * To do - print formatting on definitions
 * To do - add more decks
         
-Importer.py
+### Importer.py
 
 Importer is a helper program that will try to import a a dictionary into 
 dicts.py from an external CSV. Currently the CSV must be one column, with 
@@ -41,19 +41,19 @@ and entry for the new deck you just uploaded.
 * To do - insert new dict before ALL_DICTS
 * To do - add new dict to ALL_DICTS
 
-Dicts.py
+### Dicts.py
 
 This is a reference document for the flash cards, and contains the actual
 terms and definitions. You can manually add dictionaries or use importer.
 Make sure to update ALL_DICTS if you do add a deck.
 
-Installation:
+## Installation:
 
 clone repository and run from command line using:
     
     python menu.py
     
-Requirements:
+## Requirements:
 
 Uses fstrings so you will need as least python 3.6. All imported modules
 part of standard library.

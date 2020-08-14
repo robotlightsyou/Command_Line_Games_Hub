@@ -31,7 +31,7 @@ quick round.
 
 Importer is a helper program that will try to import a a dictionary into 
 dicts.py from an external CSV. Currently the CSV must be one column, with 
-the term at the start of the cell, followed by a ';', followed by the
+the term at the start of the cell, followed by a ':', followed by the
 definition. Importer will attempt to sterilize any mentions of term in
 the definition, but it is a brute tool that will likely require manual
 editing. After importing copy ALL_DICTS to the end of the file, and add

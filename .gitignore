@@ -3,3 +3,4 @@ base_functioning_eos.py
 myfile.db
 **.db
 **/**.db
+eoscards.py

@@ -24,7 +24,6 @@ independently. If run from menu player stats will be tracked and multiple
 rounds can be played. If run directly from memory.py it will act as a
 quick round.
 
-* To do - weight questions based on user responses
 * To do - print formatting on definitions
 * To do - add more decks
         

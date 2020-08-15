@@ -72,7 +72,7 @@ def one_round(answered, correct, user, deck):
     '''
     time.sleep(1)
     os.system('clear')
-    ans = get_ans(answered, deck)
+    ans = get_ans(answered, deck, user)
     defs = get_anspad(ans, deck)
     defs = shuffle(defs, ans, deck)
     respond = ask_q(ans, defs, user, deck)
@@ -83,7 +83,7 @@ def one_round(answered, correct, user, deck):
     return answered
 
 
-def get_ans(answered, deck):
+def get_ans(answered, deck, user):
     '''
     DOCSTRING: This function takes in a list answered and a dictionary
     deck. It selects a random entry from the dictionary and compares
@@ -94,15 +94,17 @@ def get_ans(answered, deck):
     Output:
         string: answer
     '''
+    keys_list = list(deck.keys())
+    prob_list = [user.memory[deck['__dict_name__']][i].avg_time for i in keys_list]
     answer = ""
     while True:
-        # answer = pick random entry
-        answer = random.choice(list(deck.keys()))
+        answer = random.choices(keys_list, cum_weights= prob_list, k = 1)
         # compare answer against previous game answer
         if answer not in answered:
             if answer != '__dict_name__':
+                print(answer)
                 break
-    return answer
+    return answer[0]
 
 
 def get_anspad(answer, deck):
@@ -112,7 +114,7 @@ def get_anspad(answer, deck):
     confirm there are no duplicates.
     Returns a list "anspad" to be shuffled and printed
     Input:
-        string: answered
+        string: answer
     Output:
         list: anspad --> the 3 incorrect answers
     '''
@@ -200,7 +202,8 @@ def m_play_again(user, deck):
 
 
 if __name__ == '__main__':
-    user = mu.get_player()
+    # user = mu.get_player()
+    user = mu.User('Player')
     deck_prompt = "What deck would you like to play?"
     deck = mu.choose_list(mu.DECKLIST, deck_prompt)
     os.system('clear')

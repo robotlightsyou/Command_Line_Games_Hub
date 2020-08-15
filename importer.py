@@ -43,12 +43,13 @@ with open(sys.argv[1], 'r') as f:
     for index, line in enumerate(lines):
         if line.startswith("ALL_DICTS"):
             break
-    lines.insert(index - 3, "}")
+    lines.insert(index, f"             {sys.argv[2]}['__dict_name__']: {sys.argv[2]},\n")
+    lines.insert(index - 4, "}")
     for k,v in result.items():
-        lines.insert(index - 3, f"'{k}': '{result[k]}',\n")
-    lines.insert(index - 3, "'__dict_name__': '{}',\n".format(sys.argv[3]))
-    lines.insert(index - 3, f"{sys.argv[2]} = {{")
-    lines.insert(index - 3, "\n\n")
+        lines.insert(index - 4, f"'{k}': '{result[k]}',\n")
+    lines.insert(index - 4, "'__dict_name__': '{}',\n".format(sys.argv[3]))
+    lines.insert(index - 4, f"{sys.argv[2]} = {{")
+    lines.insert(index - 4, "\n\n")
     with open('dicts.py', 'w') as outfile:
         contents = outfile.writelines(lines)
 print('Done')

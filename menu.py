@@ -14,6 +14,10 @@ Ideally games can be run independently or from here.
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
 * [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
+* [ ] - edit eosdict definitions for length
+* [ ] - function to calculate total length of definitions in anspad for wighting
+* [ ] - format printing of definitions to fit to screen
+* [ ] - add update_deck method to User class in case deckk changes
 
 * [X] - fix anser/anspad selection so it ignores __dict_name__
 * [X] - fix return_stats shows times_correct, update methods

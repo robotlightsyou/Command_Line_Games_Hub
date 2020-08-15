@@ -11,7 +11,8 @@ Ultimately the plan is to migrate to a Django driven web app.
 Menu is the actual hub. When this program is run you will be presented
 with the option to load a player or start a new save. Next you will be
 asked which game you would like to play. After there may be some setup
-screens before the game is started.
+screens before the game is started. At the conclusion of the session player stats for that
+game will be displayed and the player's progress saved.
 
 * To do - move Term to memory for cleanliness?
 * To do - create seesion class to better track session attributes
@@ -29,16 +30,12 @@ quick round.
         
 ### importer.py
 
-Importer is a helper program that will try to import a a dictionary into 
+Importer is a helper program that will try to import a dictionary into 
 dicts.py from an external CSV. Currently the CSV must be one column, with 
 the term at the start of the cell, followed by a ':', followed by the
 definition. Importer will attempt to sterilize any mentions of term in
 the definition, but it is a brute tool that will likely require manual
-editing. After importing cut and paste ALL_DICTS to the end of the file, and add
-and entry for the new deck you just uploaded.
-
-* To do - insert new dict before ALL_DICTS
-* To do - add new dict to ALL_DICTS
+editing. 
 
 ### dicts.py
 

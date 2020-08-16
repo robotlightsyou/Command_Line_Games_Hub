@@ -95,10 +95,11 @@ def get_ans(answered, deck, user):
         string: answer
     '''
     keys_list = list(deck.keys())
-    prob_list = [user.memory[deck['__dict_name__']][i].avg_time for i in keys_list]
+    prob_list = [user.memory[deck['__dict_name__']][i].weight for i in keys_list]
     answer = ""
     while True:
-        answer = random.choices(keys_list, cum_weights= prob_list, k = 1)
+        answer = random.choices(keys_list, weights= prob_list, k = 1)
+        # answer = random.choices(keys_list, cum_weights= prob_list, k = 1)
         # compare answer against previous game answer
         if answer not in answered:
             if answer != '__dict_name__':
@@ -161,8 +162,10 @@ def ask_q(answer, anspad, user, deck):
     print("Answer: ")
     response = mu.valifate_response(anspad)
     end_time = time.time()
+    defs_length = sum([len(i) for i in anspad])
     user.memory[deck['__dict_name__']][answer].update_time(
         start_time, end_time)
+    user.memory[deck['__dict_name__']][answer].update_weight(defs_length)
     return anspad[response]
 
 

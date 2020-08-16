@@ -73,6 +73,7 @@ class Term():
         self.times_correct = 0
         self.avg_time = 0
         self.cum_time = 0
+        self.weight = 1_000
 
     # add algo for weighting questions here?
     def update_time(self, start_time, end_time):
@@ -100,6 +101,16 @@ class Term():
         print(f"Times answered: {self.times_answeered}")
         print(f"Times correct: {self.times_correct}")
         print(f"Average Time: {self.avg_time:.1f}")
+        print(f"Weight: {self.weight}")
+
+    def update_weight(self, integer):
+        self.weight = integer / self.avg_time
+        # self.divtime = integer / self.avg_time
+        # self.divlen = self.avg_time/ integer
+        # self.multtime = integer * self.avg_time
+        # print(f"div time = {self.divtime}\ndiv len = {self.divlen}")
+        # print(f"multtime = {self.multtime}")
+        # input('press enter')
 
     def __str__(self):
         # return "'{}': {}".format(self.name, self.defi)
@@ -363,7 +374,7 @@ def play_again(user, session_cards, deck):
     print(f"{user.name},\n\tWould you like to play again?")
     print("Enter 'y' or 'n'\n")
     if input('>')[0].lower() != 'n':
-        peint()
+        print()
         play_memory(user, session_cards, deck)
 
 

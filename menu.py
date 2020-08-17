@@ -40,7 +40,7 @@ Ideally games can be run independently or from here.
 ###############
 import os
 import sys
-# from pprint import pprint
+import pprint
 import shelve
 import dicts
 import memory as m
@@ -97,7 +97,7 @@ class Term():
         self.times_correct += 1
 
     def print_stats(self):
-        print(self.__str__())
+        pprint.pprint(self.__str__())
         print(f"Times answered: {self.times_answeered}")
         print(f"Times correct: {self.times_correct}")
         print(f"Average Time: {self.avg_time:.1f}")
@@ -356,6 +356,7 @@ def return_stats(user, recent_words, deck):
     print("here's your stats for them:\n")
     for card in recent_words:
         print(user.memory[deck['__dict_name__']][card].print_stats())
+        # pprint.pprint(user.memory[deck['__dict_name__']][card].print_stats())
         print()
     print()
     input('                                        Press enter to quit.')

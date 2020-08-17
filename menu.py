@@ -10,12 +10,9 @@ Ideally games can be run independently or from here.
         no output, but can start games and write to memory.
 
 # @TODO:
-* [ ] - why is return_stats printing none?
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
-* [ ] - weight terms towards problem cards
 * [ ] - @TODO: update comments and documentation
 * [ ] - edit eosdict definitions for length
-* [ ] - function to calculate total length of definitions in anspad for wighting
 * [ ] - format printing of definitions to fit to screen
 * [ ] - add update_deck method to User class in case deckk changes
 
@@ -31,6 +28,9 @@ Ideally games can be run independently or from here.
 * [X] - fix play_again so it goes more than 1 deep
 * [X] - --> confirm returning user stas correctly
 * [X] - @TODO: read csv and split entries into dictionary
+* [X] - function to calculate total length of definitions in anspad for wighting
+* [X] - why is return_stats printing none?
+* [X] - weight terms towards problem cards
 
 '''
 
@@ -62,20 +62,19 @@ class Term():
         definition and the player's stats wih them. Unique to User instance
     Input:
         string: name - the name of memory card
-        dict: shared_dict - the dictionary/deck containing this card
+        dict: deck - the dictionary/deck containing this card
     '''
 
-    def __init__(self, name, Deck):
+    def __init__(self, name, deck):
         self.name = name
-        self .dict_name = Deck['__dict_name__']
-        self.defi = Deck[name]
+        self .dict_name = deck['__dict_name__']
+        self.defi = deck[name]
         self.times_answeered = 0
         self.times_correct = 0
         self.avg_time = 0
         self.cum_time = 0
         self.weight = 1_000
 
-    # add algo for weighting questions here?
     def update_time(self, start_time, end_time):
         '''
         DOCSTRING: This method updates User stats for Term after each time
@@ -113,7 +112,6 @@ class Term():
         # input('press enter')
 
     def __str__(self):
-        # return "'{}': {}".format(self.name, self.defi)
         return f"'{self.name}': {self.defi}"
 
 
@@ -355,8 +353,7 @@ def return_stats(user, recent_words, deck):
     print("    In the last session you answered the following cards,")
     print("here's your stats for them:\n")
     for card in recent_words:
-        print(user.memory[deck['__dict_name__']][card].print_stats())
-        # pprint.pprint(user.memory[deck['__dict_name__']][card].print_stats())
+        user.memory[deck['__dict_name__']][card].print_stats()
         print()
     print()
     input('                                        Press enter to quit.')

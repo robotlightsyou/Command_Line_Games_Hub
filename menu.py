@@ -1,13 +1,8 @@
 #!/usr/bin/python3
 
 
-'''
-DOCSTRING: This program serves as a hub for simple command line games.
-Ideally games can be run independently or from here.
-    Input:
-        no input
-    Output:
-        no output, but can start games and write to memory.
+"""
+This program serves as a hub for simple command line games.
 
 # @TODO:
 * [ ] - add ordered dict to printing dicts.ALL_DECKS
@@ -32,12 +27,10 @@ Ideally games can be run independently or from here.
 * [X] - why is return_stats printing none?
 * [X] - weight terms towards problem cards
 
-'''
+"""
 
 
-###############
-##  IMPORTS  ##
-###############
+# IMPORTS
 import os
 import sys
 import pprint
@@ -46,24 +39,20 @@ import dicts
 import memory as m
 
 
-#################
-##  CONSTANTS  ##
-#################
+# CONSTANTS
 DECKSDICT = dicts.ALL_DECKS
 DECKLIST = list(DECKSDICT.keys())
 
 
-###############
-##  CLASSES  ##
-###############
+# CLASSES
 class Term():
-    '''
-    DOCSTRING: these are the actual memory cards, they contain the
-        definition and the player's stats wih them. Unique to User instance
+    """
+    The actual flash cards, unique to User instance.
+
     Input:
-        string: name - the name of memory card
-        dict: deck - the dictionary/deck containing this card
-    '''
+    name - string name of memory card
+    deck - the dictionary/deck containing this card
+    """
 
     def __init__(self, name, deck):
         self.name = name
@@ -76,15 +65,15 @@ class Term():
         self.weight = 1_000
 
     def update_time(self, start_time, end_time):
-        '''
-        DOCSTRING: This method updates User stats for Term after each time
-            Term is asked, regardless of whether User answers correctly.
+        """
+        Updates User stats for Term after each time Term is asked.
+
         Input:
-            start_time: inetger - when the question was asked.
-            end_time: integer - when the answer was given.
+        start_time -- inetger - when the question was asked.
+        end_time -- integer - when the answer was given.
         Output:
-            No return but does modify User stats
-        '''
+        No return but does modify User stats
+        """
         ans_time = end_time - start_time
         self.times_answeered += 1
         self.cum_time += ans_time
@@ -116,12 +105,12 @@ class Term():
 
 
 class User():
-    '''
-    DOCSTRING: The User class represents the player. For each game player
-        has played, User object will add a dictionary to hold player stats.
+    """
+    Store stats about games played and player information.
+
     Input:
-        string: name - the name used to reference player, a User object.
-    '''
+    string -- the name used to reference player, a User object.
+    """
 
     def __init__(self, name):
         self.name = name
@@ -130,12 +119,12 @@ class User():
         self.memory_decks = []
 
     def add_deck(self, deck):
-        '''
-        DOCSTRING: This method for the Memory Card game, it will create
-            Term objects in the player.memory dictionary.
+        """
+        Create Term objects in the player.memory dictionary.
+
         Input:
-            dictionary: deck - chosen from dicts.py
-        '''
+        deck - dictionary: chosen from dicts.py
+        """
         name = deck['__dict_name__']
         # first check if player has previously played deck
         if name not in self.memory_decks:
@@ -145,18 +134,17 @@ class User():
                 self.memory[name][card] = Term(card, deck)
 
 
-##################
-##  GAME SETUP  ##
-##################
+# GAME SETUP
 def choose_list(options, prompt):
-    '''
-    DOCSTRING: this function takes a list and returns the player's choice.
+    """
+    Display options and return player choice.
+
     Input:
-        list - options - a list of choices to be printed
+    options -- the list to be printed
     Output:
-        object: the list item at the index of the player's choice, type
-        depends on input.
-    '''
+    object -- the list item at the index of the player's choice, type
+    depends on input.
+    """
     os.system('clear')
     print(prompt)
     for index, value in enumerate(options):
@@ -168,12 +156,12 @@ def choose_list(options, prompt):
 
 
 def how_long():
-    '''
-    DOCSTRING: this function set the time limit on the individual rounds
-        of the game.
+    """
+    Set the time limit on the individual rounds of the game.
+
     Output:
-        integer: time - number of seconds for the round to last
-    '''
+    time -- integer number of seconds for the round to last.
+    """
     # os.system('clear')
     print('Enter how long you would like the round to last in seconds.')
     print('Minimum is 30 seconds, max is 120.\n')
@@ -192,15 +180,14 @@ def how_long():
 
 
 def valifate_response(ans_list):
-    '''
-    DOCSTRING: This function actually gets the user's response and
-    tests that it is one of the valid options
+    """
+    Take in user response and test it is valid.
+
     Input:
-        list: - ans_list - the options printed by choose_list()
-        integer: input by player during execution.
+    ans_list -- the options printed by choose_list()
     Output:
-        integer: response
-    '''
+    response -- an integer
+    """
     response = -1
     while response not in list(range(len(ans_list))):
         try:
@@ -214,6 +201,7 @@ def valifate_response(ans_list):
 
 
 def choose_deck():
+    """Display options and return user deck choice."""
     deck_prompt = "What deck would you like to play?"
     choice = choose_list(DECKLIST, deck_prompt)
     deck = dicts.ALL_DECKS[choice]
@@ -227,16 +215,14 @@ def play_memory(player, session_cards, deck):
     play_again(player, session_cards, deck)
 
 
-####################
-##  PLAYER SETUP  ##
-####################
+# PLAYER SETUP
 def get_player():
-    '''
-    DOCSTRING: this is a helper funtion to direct player to new_player()
-        and load_player() depending on what the player chooses.
+    """
+    Direct player to new_player() or load_player().
+
     Output:
-        User: user - the instance of the player.
-    '''
+    user - the User instance of the player.
+    """
     os.system('clear')
     print("Are you a returning player?\n[y/n]\n")
     new = input('>')
@@ -252,13 +238,12 @@ def get_player():
 
 
 def new_player():
-    '''
-    DOCSTRING: this function takes in a player's name and checks it against
-        the savefile to see if player already exists. Recursively loops
-        until player enters a valid new name
+    """
+    Get player name and confirm not already in loadfile.
+
     Output:
-        User: user - the new User object created for the player.
-    '''
+    user - the new User object created for the player.
+    """
     print("Who is playing? \n")
     player_name = input('>')
     print()
@@ -278,14 +263,12 @@ def new_player():
 
 
 def load_player():
-    '''
-    DOCSTRING: this functions loads a player from the save if they exist.
-        If player doesn't exist, calls no_name() to get player input.
-    Input:
-        no input at call.
+    """
+    Load a USer instance from loadfile.
+
     Output:
-        string: player_name - input from player
-    '''
+    player_name -- string input from player
+    """
     print("Who is playing? \n")
     player_name = input('>')
     print()
@@ -298,15 +281,12 @@ def load_player():
 
 
 def no_name():
-    '''
-    DOCSTRING: this is the problem solver when player tries to load a
-        name that can't be found in the savefile. Will give player option
-        to load different name or start a new file.
-    Input:
-        string: input from player.
+    """
+    Exception handler when load fails because User not found.
+
     Output:
-        User: user, if new selected. Else load_player()
-    '''
+    User: user, if new selected. Else load_player()
+    """
     noname_prompt = "Sorry, I can't find that file. Would you like to:"
     ans_list = ["Try a different name", "Start a new save"]
     response = choose_list(ans_list, noname_prompt)
@@ -318,27 +298,25 @@ def no_name():
 
 
 def save_player(user):
-    '''
-    DOCSTRING: this functions opens the local savefile and updates with
-        the player, or creates the savefile if none exists.
+    """
+    Update savefile or create new user entry.
+
     Input:
-        User: user - the player from this session
+    user - the User instance for the player from this session.
     Output:
-        no return but writes to file.
-    '''
+    no return but writes to file.
+    """
     with shelve.open('myfile') as savefile:
         savefile[user.name] = user
 
 
-#################
-##  POST GAME  ##
-#################
+# POST GAME
 
 # @TODO: pretty print this so user doesn't have to scroll back to top.
 
 
 def return_stats(user, recent_words, deck):
-    '''
+    """
     DOCSTRING: This function takes in a user and a list of session
     words and prints that users stats with those cards
     Input:
@@ -347,7 +325,7 @@ def return_stats(user, recent_words, deck):
         dictionary: deck - the dictionary being tested
     Output:
         No output, prints to screen
-    '''
+    """
     os.system('clear')
     print(f"{user.name},")
     print("    In the last session you answered the following cards,")
@@ -361,14 +339,12 @@ def return_stats(user, recent_words, deck):
 
 
 def play_again(user, session_cards, deck):
-    '''
-    DOCSTRING: This function asks the user if they want to play again
-    if yes, restart memory, if no then exit.
+    """
+    Ask user to play again, then restart or quit.
+
     Input:
-        User: user
-    Output:
-        No output, but can restart the game
-    '''
+    user -- the User instance for current player.
+    """
     print(f"{user.name},\n\tWould you like to play again?")
     print("Enter 'y' or 'n'\n")
     if input('>')[0].lower() != 'n':

@@ -15,7 +15,6 @@ from te most recent round
 User: user - an update User instance
 """
 
-# IMPORTS
 import random
 import time
 import os
@@ -23,9 +22,9 @@ from pprint import pprint
 import shelve
 import menu as mu
 import dicts
+import utils
 
 
-# FUNCTIONS 
 def memory(user, deck):
     """
     Run the full game sequence one time.
@@ -38,12 +37,13 @@ def memory(user, deck):
     user -- the updated User object.
     """
     # past is a list of all cards played in session
-    past = []
+    past = set()
+    # past  = []
     correct = 0
-    tlimit = mu.how_long()
+    tlimit = how_long()
     timer = time.time()
     while len(past) < len(deck):
-        past = one_round(past, correct, user, deck)
+        past |= one_round(past, correct, user, deck)
         # add 1 second to account for displaying results
         timer += 1
         if time.time() - tlimit > timer:
@@ -76,7 +76,7 @@ def one_round(answered, correct, user, deck):
     defs = shuffle(defs, ans, deck)
     respond = ask_q(ans, defs, user, deck)
     if verify(ans, respond, deck):
-        answered.append(ans)
+        answered.add(ans)
         correct += 1
         user.memory[deck['__dict_name__']][ans].update_correct()
     return answered
@@ -100,11 +100,35 @@ def get_ans(answered, deck, user):
         answer = random.choices(keys_list, weights= prob_list, k = 1)
         # answer = random.choices(keys_list, cum_weights= prob_list, k = 1)
         # compare answer against previous game answer
-        if answer not in answered:
-            if answer != '__dict_name__':
+        if answer[0] not in answered:
+            if answer[0] != '__dict_name__':
                 print(answer)
                 break
     return answer[0]
+
+
+def how_long():
+    """
+    Set the time limit on the individual rounds of the game.
+
+    Output:
+    time -- integer number of seconds for the round to last.
+    """
+    # os.system('clear')
+    print('Enter how long you would like the round to last in seconds.')
+    print('Minimum is 30 seconds, max is 120.\n')
+    time = input(">")
+    print()
+    try:
+        time = int(time)
+        if 30 <= time <= 120:
+            return time
+        else:
+            print("please enter digits between 30-120")
+            return how_long()
+    except ValueError:
+        print("please enter digits between 30-120")
+        return how_long()
 
 
 def get_anspad(answer, deck):
@@ -168,7 +192,7 @@ def ask_q(answer, anspad, user, deck):
     print(
         f"1) {anspad[0]}\n2) {anspad[1]}\n3) {anspad[2]}\n4) {anspad[3]}\n\n")
     print("Answer: ")
-    response = mu.valifate_response(anspad)
+    response = utils.valifate_response(anspad)
     end_time = time.time()
     defs_length = sum([len(i) for i in anspad])
     user.memory[deck['__dict_name__']][answer].update_time(
@@ -220,9 +244,9 @@ def m_play_again(user, deck):
 
 if __name__ == '__main__':
     # user = mu.get_player()
-    user = mu.User('Player')
+    user = utils.User('Player')
     deck_prompt = "What deck would you like to play?"
-    deck = mu.choose_list(mu.DECKLIST, deck_prompt)
+    deck = utils.choose_list(mu.DECKLIST, deck_prompt)
     os.system('clear')
     memory(user, deck)
     m_play_again(user, deck)

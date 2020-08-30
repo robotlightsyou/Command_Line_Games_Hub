@@ -24,15 +24,10 @@ import memory as m
 import utils
 
 
-# CONSTANTS
-DECKSDICT = dicts.ALL_DECKS
-DECKLIST = list(DECKSDICT.keys())
-
-
 def choose_deck():
     """Display options and return user deck choice."""
     deck_prompt = "What deck would you like to play?"
-    choice = utils.choose_list(DECKLIST, deck_prompt)
+    choice = utils.choose_list(utils.DECKLIST, deck_prompt)
     deck = dicts.ALL_DECKS[choice]
     os.system('clear')
     return deck

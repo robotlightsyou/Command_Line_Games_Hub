@@ -2,6 +2,11 @@
 
 import pprint
 import os
+import dicts
+
+
+DECKSDICT = dicts.ALL_DECKS
+DECKLIST = list(DECKSDICT.keys())
 
 
 class Term():

@@ -57,15 +57,16 @@ def importer():
         ## add new dict to ALL_DICTS
         lines.insert(index + 3, f"             {sys.argv[2]}['__dict_name__']: {sys.argv[2]},\n")
         # add new terms before ALL_DICTS to preserve functionality
-        lines.insert(index - 1, "\n\n")
-        lines.insert(index - 1, "}")
+        index_shift = index - 1
+        lines.insert(index_shift, "\n\n")
+        lines.insert(index_shift, "}")
         # add individual terms
         for k,v in result.items():
-            lines.insert(index - 1, f"'{k}': '{result[k]}',\n")
+            lines.insert(index_shift, f"    '{k}': '{result[k]}',\n")
         # add __dict_name__ key to new dict for memory.py
-        lines.insert(index - 1, "'__dict_name__': '{}',\n".format(sys.argv[3]))
-        lines.insert(index - 1, f"{sys.argv[2]} = {{")
-        lines.insert(index - 1, "\n")
+        lines.insert(index_shift, "'__dict_name__': '{}',\n".format(sys.argv[3]))
+        lines.insert(index_shift, f"{sys.argv[2]} = {{")
+        lines.insert(index_shift, "\n")
 
         #overwrite dicts.py with new dictionary inluded
         with open('dicts.py', 'w') as outfile:
